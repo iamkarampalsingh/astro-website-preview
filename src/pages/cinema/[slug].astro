@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export function getStaticPaths() {
+  const films = {
+    'massage-video': { label: 'WINKS MASSAGE VIDEO', title: 'The ritual in motion.', intro: 'A quiet, cinematic look at the details that make a WINKS evening feel different.', poster: '/images/winks-cinema.jpg', file: 'winks-massage-video.mp4' },
+    'tv-ad': { label: 'WINKS TV AD VIDEO', title: 'A little WINKS.', intro: 'The WINKS London brand film: black, white, gold and the promise of a slower evening.', poster: '/images/winks-hero.jpg', file: 'winks-tv-ad.mp4' },
+  };
+  return Object.entries(films).map(([slug, film]) => ({ params: { slug }, props: { film } }));
+}
+const { film } = Astro.props;
+---
+<BaseLayout title={`${film.label} · WINKS Cinema`} description={film.intro}>
+  <section class="page-hero"><span class="page-hero__watermark">FILM</span><div class="container-fluid px-3 px-lg-4 page-hero__content"><div class="breadcrumb-line"><a href="/">Home</a><span>/</span><a href="/cinema">Cinema</a><span>/</span><span class="current">{film.label}</span></div><span class="eyebrow mt-4">{film.label}</span><h1>{film.title}</h1><p>{film.intro}</p></div></section>
+  <section class="section section--line"><div class="container-fluid px-3 px-lg-4"><div class="video-frame cinema-video-frame"><video class="cinema-video" autoplay muted loop playsinline poster={film.poster} preload="metadata" aria-label={film.label}><source src={`/videos/${film.file}`} type="video/mp4" /></video><div class="video-frame__overlay"><span class="eyebrow">{film.label}</span><h2>{film.title}</h2><p class="video-controls-note">Autoplay is muted by design. Tap the player controls for sound when your browser allows it.</p></div><div class="video-placeholder-badge">MP4 slot · autoplay · muted · loop</div></div><p class="form-note mt-3">Production note: replace <code>public/videos/{film.file}</code> with the final WINKS footage. The poster and accessible video structure are already in place.</p></div></section>
+  <section class="section section--white section--tight"><div class="container-fluid px-3 px-lg-4"><div class="d-flex flex-wrap justify-content-between align-items-end gap-3"><div><span class="eyebrow">Keep the mood going</span><h2 class="section-title mb-0">Find your<br /><em>experience.</em></h2></div><a class="btn btn-outline-gold" href="/massages">Explore the collection <span aria-hidden="true">↗</span></a></div></div></section>
+</BaseLayout>

@@ -1,0 +1,168 @@
+---
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import { navigation } from '../data/site.js';
+
+const { title = 'WINKS London · Private outcall experiences', description = 'WINKS London is a discreet, premium outcall massage service across London.', active = '' } = Astro.props;
+const currentPath = Astro.url.pathname;
+const isCurrent = (href) => href === '/' ? currentPath === '/' : currentPath === href || currentPath.startsWith(`${href}/`);
+const itemHref = (item) => item.href || `/massages/${item.slug}`;
+const itemLabel = (item) => item.label || item.name || item.title;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/images/winks-logo.svg" />
+    <meta name="theme-color" content="#090909" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <div class="top-strip">
+        <div class="container-fluid px-3 px-lg-4">
+          <div class="top-strip__inner">
+            <div class="top-strip__cluster">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>UK TIME <strong data-uk-time>--:--</strong></span>
+              <span class="top-separator" aria-hidden="true"></span>
+              <span class="weather-readout"><i class="bi bi-cloud-sun" aria-hidden="true"></i> <span data-uk-weather>LONDON · CHECKING WEATHER</span></span>
+            </div>
+            <div class="top-strip__cluster top-strip__cluster--right">
+              <span>HOURS <strong>1PM–2AM</strong></span>
+              <a href="tel:+442071187118">+44 (0)20 7118 7118</a>
+              <a href="https://wa.me/447889598888" target="_blank" rel="noreferrer">WHATSAPP <strong>+44 7889 598888</strong></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <header class="site-header" id="site-header">
+        <nav class="navbar navbar-expand-xl" aria-label="Primary navigation">
+          <div class="container-fluid px-3 px-lg-4">
+            <Logo />
+            <div class="header-actions d-flex align-items-center gap-2 order-xl-3">
+              <a class="header-quick-link d-none d-md-inline-flex" href="/contact/reserve"><span class="header-quick-dot"></span> Reserve</a>
+              <button class="music-control" type="button" data-music-toggle aria-pressed="false" title="Play ambient sound">
+                <i class="bi bi-volume-mute" aria-hidden="true"></i><span class="d-none d-sm-inline">AMBIENT</span>
+              </button>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#winks-nav" aria-controls="winks-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"><span></span><span></span><span></span></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse order-xl-2" id="winks-nav">
+              <ul class="navbar-nav ms-auto align-items-xl-center">
+                {navigation.map((nav) => (
+                  <li class={`nav-item ${nav.menu ? 'dropdown has-mega-menu' : ''}`}>
+                    <a class={`nav-link ${isCurrent(nav.href) ? 'is-active' : ''}`} href={nav.href} {...(nav.menu ? { 'data-bs-toggle': 'dropdown', 'aria-expanded': 'false' } : {})}>
+                      {nav.label}{nav.menu && <span class="nav-caret">+</span>}
+                    </a>
+                    {nav.menu && (
+                      <div class={`dropdown-menu ${nav.label === 'MASSAGE COLLECTION' ? 'mega-menu mega-menu--collection' : 'mega-menu'}`}>
+                        <div class="mega-menu__inner">
+                          <div class="mega-menu__intro">
+                            <span class="eyebrow">{nav.label === 'MASSAGE COLLECTION' ? 'THE WINKS COLLECTION' : nav.label}</span>
+                            <p>{nav.label === 'MASSAGE COLLECTION' ? 'Choose your mood. Every experience is arranged privately and delivered to your door.' : nav.label === 'CONTACT' ? 'A quiet line into the WINKS team.' : 'Take your time. The details are here when you need them.'}</p>
+                            <a class="text-link" href={nav.href}>View all <span aria-hidden="true">↗</span></a>
+                          </div>
+                          <div class="mega-menu__links">
+                            {nav.menu.map((item) => (
+                              <a class="mega-link" href={itemHref(item)}>
+                                <span>{itemLabel(item)}</span>
+                                <span class="mega-link__arrow" aria-hidden="true">↗</span>
+                              </a>
+                            ))}
+                            {nav.extra?.map((item) => (
+                              <a class="mega-link" href={item.href}>
+                                <span>{item.label}</span>
+                                <span class="mega-link__arrow" aria-hidden="true">↗</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="container-fluid px-3 px-lg-4">
+          <div class="footer-top row g-5">
+            <div class="col-lg-5">
+              <Logo compact />
+              <p class="footer-intro">A private, premium outcall experience for London. WINKS keeps the atmosphere calm, the details clear and the guest journey beautifully discreet.</p>
+              <div class="footer-contact-row">
+                <a href="tel:+442071187118">+44 (0)20 7118 7118</a>
+                <a href="https://wa.me/447889598888" target="_blank" rel="noreferrer">WhatsApp ↗</a>
+              </div>
+            </div>
+            <div class="col-6 col-lg-2">
+              <span class="footer-label">Explore</span>
+              <ul class="footer-links">
+                <li><a href="/about">About WINKS</a></li>
+                <li><a href="/massages">Massage collection</a></li>
+                <li><a href="/cinema">Cinema</a></li>
+                <li><a href="/blog">The Journal</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-lg-2">
+              <span class="footer-label">Private line</span>
+              <ul class="footer-links">
+                <li><a href="/contact/reserve">Make a reservation</a></li>
+                <li><a href="/contact/email-winks">Email WINKS</a></li>
+                <li><a href="/info/faq">FAQ</a></li>
+                <li><a href="/info/reviews">Reviews</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-3">
+              <span class="footer-label">A quiet reminder</span>
+              <p class="footer-note">Adults 18+ only. Private by appointment. Please read our terms and client code before reserving.</p>
+              <a class="footer-cta" href="/contact/reserve">Start a private enquiry <span>↗</span></a>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>© {new Date().getFullYear()} WINKS London</span>
+            <span class="footer-bottom__center">LONDON · BY APPOINTMENT · 1PM–2AM</span>
+            <div class="footer-legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><span>18+</span></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="age-gate" data-age-gate hidden>
+      <div class="age-gate__panel">
+        <div class="age-gate__mark">18<span>+</span></div>
+        <span class="eyebrow">WELCOME TO WINKS LONDON</span>
+        <h2>A private adult experience.</h2>
+        <p>This website is intended for adults aged 18 and over. Please confirm your age to enter.</p>
+        <div class="age-gate__actions">
+          <button class="btn btn-gold" type="button" data-age-enter>Enter WINKS</button>
+          <a class="btn btn-outline-light" href="https://www.google.com" data-age-leave>Leave site</a>
+        </div>
+        <small>By entering, you agree to browse responsibly and respect our <a href="/info/terms-of-enjoyment">terms of enjoyment</a>.</small>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" aria-live="polite" aria-atomic="true">
+      <div class="toast winks-toast" data-site-toast role="status">
+        <div class="toast-body"><span class="toast-icon">✦</span><span data-toast-message>Thank you.</span><button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>
+      </div>
+    </div>
+
+    <script>
+      import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

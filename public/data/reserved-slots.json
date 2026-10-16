@@ -1,0 +1,7 @@
+{
+  "reservedSlots": {
+    "2026-10-09": ["19:00", "20:30"],
+    "2026-10-10": ["18:00", "21:30"]
+  },
+  "notes": "Replace this static snapshot with the live availability feed before launch. Keys use YYYY-MM-DD and times use 24-hour HH:MM."
+}

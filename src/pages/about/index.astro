@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { aboutPages } from '../../data/site.js';
+---
+<BaseLayout title="About WINKS London · The WINKS Way" description="Learn about the WINKS Way, private policy, outcall approach and discreet partner route.">
+  <section class="page-hero">
+    <span class="page-hero__watermark">ABOUT</span>
+    <div class="container-fluid px-3 px-lg-4 page-hero__content">
+      <div class="breadcrumb-line"><a href="/">Home</a><span>/</span><span class="current">About WINKS</span></div>
+      <span class="eyebrow mt-4">About WINKS London</span>
+      <h1>A quieter kind<br /><em>of luxury.</em></h1>
+      <p>Private outcall experiences shaped around atmosphere, clear communication and the freedom to switch off.</p>
+    </div>
+  </section>
+
+  <section class="section section--line">
+    <div class="container-fluid px-3 px-lg-4">
+      <div class="content-grid">
+        <div class="content-copy">
+          <span class="eyebrow">Our point of view</span>
+          <h2>Beautifully considered,<br /><em>never overdone.</em></h2>
+          <p>WINKS London is a private outcall service for guests who want a more thoughtful kind of evening. We keep the experience atmospheric, the details clear and the guest journey discreet from first message to final goodbye.</p>
+          <p>There is no public directory here. No noisy listings. No pressure to choose from a catalogue of strangers. Tell us what you are looking for and our reception team will guide you privately towards the right WINKS experience.</p>
+          <a class="btn btn-gold mt-3" href="/contact/reserve">Begin a private enquiry <span aria-hidden="true">↗</span></a>
+        </div>
+        <aside class="content-aside">
+          <div class="aside-card"><span class="eyebrow">The WINKS standard</span><h3>Clear is the new luxury.</h3><p>Every appointment is adults-only, by appointment and confirmed privately before arrival.</p><a class="text-link" href="/about/winks-policy">Read our policy <span aria-hidden="true">↗</span></a></div>
+          <div class="aside-card"><span class="eyebrow">Keep it private</span><p>We do not publish public profiles. Our WINKS MASSEUSE page is a private partner route, not a gallery.</p><a class="text-link" href="/about/winks-masseuse">Private partner route <span aria-hidden="true">↗</span></a></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container-fluid px-3 px-lg-4">
+      <div class="collection-header"><div><span class="eyebrow">Inside WINKS</span><h2 class="section-title">Take a closer<br /><em>look.</em></h2></div><p class="lead-copy">Every page below is part of the same promise: private, considered and clear.</p></div>
+      <div class="full-collection-grid">
+        {aboutPages.map((page, index) => (
+          <a class="service-card" href={`/about/${page.slug}`}>
+            <div class="service-card__top"><span class="service-card__index">0{index + 1}</span><span class="tag">About</span></div>
+            <div><h3>{page.label}</h3><p>{page.intro}</p></div>
+            <div class="service-card__bottom"><span class="service-card__duration">Read the page</span><span class="service-card__arrow" aria-hidden="true">↗</span></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

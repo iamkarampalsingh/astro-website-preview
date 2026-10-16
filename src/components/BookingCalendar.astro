@@ -1,0 +1,104 @@
+---
+import { services } from '../data/site.js';
+
+const { id = 'booking-calendar', compact = false } = Astro.props;
+---
+<div
+  id={id}
+  class={`booking-widget ${compact ? 'booking-widget--compact' : ''}`}
+  data-booking-widget
+  data-whatsapp="447889598888"
+  data-email="contact@winks-massage.com"
+  data-returning-discount="0.10"
+  data-rate-catalog={JSON.stringify(services.map(({ slug, name, rates }) => ({ slug, name, rates })))}
+>
+  <div class="booking-widget__topline">
+    <div>
+      <span class="eyebrow">Private reservation calendar</span>
+      <h2>{compact ? 'Choose your WINKS moment.' : 'Book a WINKS moment.'}</h2>
+    </div>
+    <span class="booking-widget__availability"><span class="status-dot"></span> Live request flow</span>
+  </div>
+
+  <div class="booking-progress" aria-label="Booking progress">
+    <div class="booking-progress__item is-active" data-progress-item="1"><span>01</span><b>Experience</b></div>
+    <div class="booking-progress__line"></div>
+    <div class="booking-progress__item" data-progress-item="2"><span>02</span><b>Date & time</b></div>
+    <div class="booking-progress__line"></div>
+    <div class="booking-progress__item" data-progress-item="3"><span>03</span><b>Your details</b></div>
+    <div class="booking-progress__line"></div>
+    <div class="booking-progress__item" data-progress-item="4"><span>04</span><b>Send</b></div>
+  </div>
+
+  <div class="booking-widget__body">
+    <section class="booking-step is-active" data-booking-step="1">
+      <div class="booking-step__heading"><span class="eyebrow">Step 01</span><h3>Choose the experience and rate.</h3><p>Returning guests can select their status to see the configured returning-guest rate.</p></div>
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <label class="form-label" for={`${id}-experience`}>WINKS experience</label>
+          <select class="form-select" id={`${id}-experience`} data-booking-experience>
+            <option value="" selected>Select a massage</option>
+            {services.map((service) => <option value={service.slug}>{service.name}</option>)}
+          </select>
+        </div>
+        <div class="col-lg-5">
+          <span class="form-label d-block">Guest status</span>
+          <div class="booking-choice-grid" role="group" aria-label="Guest status">
+            <button type="button" class="booking-choice is-selected" data-customer-type="new"><span class="booking-choice__radio"></span><span><b>New guest</b><small>Standard rate</small></span></button>
+            <button type="button" class="booking-choice" data-customer-type="existing"><span class="booking-choice__radio"></span><span><b>Existing guest</b><small>Returning rate</small></span></button>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="booking-rate-panel" data-rate-panel>
+            <div class="booking-empty-state"><span class="booking-empty-state__icon">✦</span><span>Select an experience to see available durations and rates.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="booking-step__footer"><p class="booking-widget__fineprint">Rates are based on the current WINKS London collection. Transport and any applicable out-of-hours surcharge are confirmed privately.</p><button type="button" class="btn btn-gold" data-booking-next="1">Continue to calendar <span aria-hidden="true">↗</span></button></div>
+    </section>
+
+    <section class="booking-step" data-booking-step="2" hidden>
+      <div class="booking-step__heading"><span class="eyebrow">Step 02</span><h3>Pick a date and available time.</h3><p>Reserved slots are visibly disabled. Select a day first, then choose a live time window.</p></div>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="booking-calendar-shell">
+            <div class="booking-calendar-shell__header"><button type="button" class="booking-month-button" data-calendar-prev aria-label="Previous month">←</button><strong data-calendar-month>Month 2026</strong><button type="button" class="booking-month-button" data-calendar-next aria-label="Next month">→</button></div>
+            <div class="booking-weekdays" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            <div class="booking-calendar-grid" data-calendar-grid role="grid" aria-label="Booking calendar"></div>
+            <div class="booking-calendar-legend"><span><i class="booking-legend-dot booking-legend-dot--available"></i> Available</span><span><i class="booking-legend-dot booking-legend-dot--selected"></i> Selected</span><span><i class="booking-legend-dot booking-legend-dot--reserved"></i> Reserved</span></div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="booking-slot-panel"><div class="booking-slot-panel__header"><span class="form-label mb-0">Available time</span><strong data-selected-date-label>Select a date</strong></div><div class="booking-slot-list" data-slot-list></div><p class="booking-empty-state booking-empty-state--small" data-slot-empty>Select a date to view time slots.</p></div>
+          <div class="booking-selected-summary" data-calendar-selection-summary hidden><span class="booking-selected-summary__label">Selected slot</span><strong data-selected-slot-summary>—</strong></div>
+        </div>
+      </div>
+      <div class="booking-step__footer"><button type="button" class="btn btn-outline-light" data-booking-back="2">Back</button><button type="button" class="btn btn-gold" data-booking-next="2" disabled>Continue to details <span aria-hidden="true">↗</span></button></div>
+    </section>
+
+    <section class="booking-step" data-booking-step="3" hidden>
+      <div class="booking-step__heading"><span class="eyebrow">Step 03</span><h3>Tell us where to reach you.</h3><p>Your request will be prepared for both WhatsApp and email after you submit.</p></div>
+      <div class="booking-summary-strip"><div><span>Experience</span><strong data-summary-experience>—</strong></div><div><span>Duration / rate</span><strong data-summary-rate>—</strong></div><div><span>Date / time</span><strong data-summary-slot>—</strong></div></div>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6"><label class="form-label" for={`${id}-name`}>Your name</label><input class="form-control" id={`${id}-name`} data-booking-name autocomplete="name" required /></div>
+        <div class="col-md-6"><label class="form-label" for={`${id}-phone`}>Phone / WhatsApp</label><input class="form-control" id={`${id}-phone`} data-booking-phone type="tel" autocomplete="tel" required /></div>
+        <div class="col-md-6"><label class="form-label" for={`${id}-email`}>Email address</label><input class="form-control" id={`${id}-email`} data-booking-email type="email" autocomplete="email" required /></div>
+        <div class="col-md-6"><label class="form-label" for={`${id}-guests`}>Number of guests</label><select class="form-select" id={`${id}-guests`} data-booking-guests required><option value="" selected>Select</option><option>One guest</option><option>Two guests</option></select></div>
+        <div class="col-md-6"><label class="form-label" for={`${id}-area`}>London area</label><input class="form-control" id={`${id}-area`} data-booking-area placeholder="e.g. Mayfair, Chelsea, hotel name" required /></div>
+        <div class="col-md-6"><label class="form-label" for={`${id}-setting`}>Setting</label><select class="form-select" id={`${id}-setting`} data-booking-setting required><option value="" selected>Select</option><option>Private residence</option><option>Hotel suite</option></select></div>
+        <div class="col-12"><label class="form-label" for={`${id}-notes`}>Notes for the WINKS team</label><textarea class="form-control" id={`${id}-notes`} data-booking-notes rows="3" placeholder="Access notes, mood or questions"></textarea></div>
+        <div class="col-12"><div class="form-check"><input class="form-check-input" id={`${id}-consent`} data-booking-consent type="checkbox" required /><label class="form-check-label" for={`${id}-consent`}>I confirm I am 18 or over and have read the <a href="/info/terms-of-enjoyment">terms of enjoyment</a>.</label></div></div>
+      </div>
+      <div class="booking-step__footer"><button type="button" class="btn btn-outline-light" data-booking-back="3">Back</button><button type="button" class="btn btn-gold" data-booking-submit>Send to WhatsApp & email <span aria-hidden="true">↗</span></button></div>
+      <p class="booking-validation-message" data-booking-validation role="alert" hidden>Please complete the required details before sending your request.</p>
+    </section>
+
+    <section class="booking-step booking-step--complete" data-booking-step="4" hidden>
+      <div class="booking-complete-mark">✦</div><span class="eyebrow">Step 04 · ready to send</span><h3>Your request is prepared.</h3><p>Use both links below to send the same booking request directly to WINKS on WhatsApp and by email.</p>
+      <div class="booking-final-summary" data-final-summary></div>
+      <div class="booking-send-actions"><a class="btn btn-gold" data-whatsapp-link href="#" target="_blank" rel="noreferrer">Open WhatsApp <span aria-hidden="true">↗</span></a><a class="btn btn-outline-light" data-email-link href="#">Open email <span aria-hidden="true">↗</span></a></div>
+      <p class="booking-widget__fineprint">Your appointment is only confirmed once WINKS replies. If a slot becomes unavailable before confirmation, the team will offer the next available option.</p>
+      <button type="button" class="booking-start-over" data-booking-start-over>Start another request</button>
+    </section>
+  </div>
+</div>
